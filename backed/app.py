@@ -11,14 +11,14 @@ from routes.empleados_routes import empleados_bp
 
 app=Flask(__name__)
 app.config.from_object(Config)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 db.init_app(app)
 
 
 
-app.register_blueprint(categorias_bp)
-app.register_blueprint(medicamentos_bp)
-app.register_blueprint(empleados_bp)
+app.register_blueprint(categorias_bp, url_prefix='/api/categorias')
+app.register_blueprint(medicamentos_bp, url_prefix='/api/medicamentos')
+app.register_blueprint(empleados_bp, url_prefix='/api/empleados')
 
 @app.route('/', methods=['GET'])
 def index():

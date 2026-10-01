@@ -15,23 +15,43 @@ def get_empleado(id):
 
 def create_empleado():
     data = request.get_json()
+    print("Payload recibido en backend:", data)  # Ver qué llega exactamente en la terminal
 
-    if not data.get('nombre') or not data.get('nombre').strip():
-        return jsonify({'error': 'El nombre es obligatorio'}), 400
-    if not data.get('dni') or not data.get('dni').strip():
-        return jsonify({'error': 'El DNI es obligatorio'}), 400
+    if not data:
+        return jsonify({'error': 'No se enviaron datos en la petición'}), 400
 
-    nuevo_empleado = Empleado(
-        nombre=data.get('nombre'),
-        apellido=data.get('apellido'),
-        dni=data.get('dni'),
-        email=data.get('email'),
-        cargo=data.get('cargo'),
+    nombre = data.get('nombre')
+    apellido = data.get('apellido')
+    dni = data.get('dni')
+    email = data.get('email')
+    cargo = data.get('cargo')
 
-    )
-    db.session.add(nuevo_empleado)
-    db.session.commit()
-    return jsonify(nuevo_empleado.to_dict()), 201
+    if not nombre or not str(nombre).strip():
+        return jsonify({'error': 'El campo "nombre" es obligatorio'}), 400
+
+    if not dni or not str(dni).strip():
+        return jsonify({'error': 'El campo "dni" es obligatorio'}), 400
+
+    if not apellido or not str(apellido).strip():
+        return jsonify({'error': 'El campo "apellido" es obligatorio'}), 400
+
+    try:
+        nuevo_empleado = Empleado(
+            nombre=nombre.strip(),
+            apellido=apellido.strip(),
+            dni=str(dni).strip(),
+            email=email.strip() if email else None,
+            cargo=cargo.strip() if cargo else None
+        )
+        db.session.add(nuevo_empleado)
+        db.session.commit()
+
+        return jsonify(nuevo_empleado.to_dict()), 201
+
+    except Exception as e:
+        db.session.rollback()
+        print("Error en base de datos:", str(e))
+        return jsonify({'error': f'Error en base de datos: {str(e)}'}), 400
 
 def update_empleado(id):
     empleado = Empleado.query.get(id)

@@ -6,10 +6,32 @@ from controllers.medicamentos_controller import (
     update_medicamento,
     delete_medicamento
 )
+
 medicamentos_bp = Blueprint('medicamentos', __name__)
 
-medicamentos_bp.route('/api/medicamentos', methods=['GET'])(get_medicamentos)
-medicamentos_bp.route('/api/medicamentos/<int:id>', methods=['GET'])(get_medicamento)
-medicamentos_bp.route('/api/medicamentos', methods=['POST'])(create_medicamento)
-medicamentos_bp.route('/api/medicamentos/<int:id>', methods=['PUT'])(update_medicamento)
-medicamentos_bp.route('/api/medicamentos/<int:id>', methods=['DELETE'])(delete_medicamento)
+
+@medicamentos_bp.route('/', methods=['GET'])
+@medicamentos_bp.route('', methods=['GET'])
+def route_get_medicamentos():
+    return get_medicamentos()
+
+@medicamentos_bp.route('/', methods=['POST'])
+@medicamentos_bp.route('', methods=['POST'])
+def route_create_medicamento():
+    return create_medicamento()
+
+
+@medicamentos_bp.route('/<int:id>', methods=['GET'])
+@medicamentos_bp.route('/<int:id>/', methods=['GET'])
+def route_get_medicamento(id):
+    return get_medicamento(id)
+
+@medicamentos_bp.route('/<int:id>', methods=['PUT'])
+@medicamentos_bp.route('/<int:id>/', methods=['PUT'])
+def route_update_medicamento(id):
+    return update_medicamento(id)
+
+@medicamentos_bp.route('/<int:id>', methods=['DELETE'])
+@medicamentos_bp.route('/<int:id>/', methods=['DELETE'])
+def route_delete_medicamento(id):
+    return delete_medicamento(id)
