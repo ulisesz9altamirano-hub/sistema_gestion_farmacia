@@ -1,5 +1,6 @@
 import API from './api';
 
+
 // Categorías
 export const getCategorias = async () => (await API.get('/categorias')).data;
 export const createCategoria = async (categoria) => (await API.post('/categorias', categoria)).data;
