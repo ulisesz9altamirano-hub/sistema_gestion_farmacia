@@ -1,7 +1,8 @@
 # controllers/medicamentos_controller.py
 
 from flask import request, jsonify
-from models.medicamentos import Medicamento  # O el nombre de tu modelo
+from models.medicamentos import Medicamento 
+from models.medicamentos import db
 
 def get_medicamentos():
     medicamentos = Medicamento.query.all()
@@ -28,7 +29,6 @@ def create_medicamento():
     try:
         nuevo = Medicamento(
             nombre=nombre.strip(),
-            descripcion=data.get('descripcion', ''),
             precio=float(precio),
             stock=int(stock),
             fecha_vencimiento=fecha_vencimiento,
